@@ -125,6 +125,7 @@ h1.name {
 }
 .section {
   width: 905px;
+  /* height: 500px; */
   background-color: #182234;
   border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -135,6 +136,7 @@ h1.name {
   box-shadow: 0 0 0 1px #ffffff2b;
   overflow: hidden;
   z-index: 2;
+  /* overflow-y: scroll; */
 }
 .match {
   display: flex;

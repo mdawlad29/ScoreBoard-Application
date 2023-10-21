@@ -1,7 +1,14 @@
 // add button dom element
-const incrementEl = document.getElementById("increment");
-const decrementEl = document.getElementById("decrement");
-const matchResultEl = document.getElementById("match-result");
+// const incrementEl = document.getElementById("increment");
+// const decrementEl = document.getElementById("decrement");
+// const matchResultEl = document.getElementById("match-result");
+// const matchNameEl = document.getElementById("match_name");
+const addMatchEl = document.getElementById("add_another_match");
+const resetEl = document.getElementById("reset");
+const incrementInput = document.querySelector(".lws-increment");
+const decrementInput = document.querySelector(".lws-decrement");
+const matchResultEl = document.querySelector(".lws-singleResult");
+const matchNameEl = document.querySelector(".lws-matchName");
 
 // action identifiers
 const INCREMENT = "increment";
@@ -57,8 +64,15 @@ render();
 
 store.subscribe(render);
 
-// Increment Listener
-incrementEl.addEventListener("keydown", (e) => {
+// Reset Listener
+function resetFunction() {
+  matchResultEl.innerText = state.value;
+}
+
+// Add Another Match
+let matchCounter = 2;
+
+incrementInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
     const enteredValue = parseInt(e.target.value);
@@ -66,8 +80,8 @@ incrementEl.addEventListener("keydown", (e) => {
     e.target.value = "";
   }
 });
-// Decrement Listener
-decrementEl.addEventListener("keydown", (e) => {
+
+decrementInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
     const enteredValue = parseInt(e.target.value);
@@ -75,3 +89,49 @@ decrementEl.addEventListener("keydown", (e) => {
     e.target.value = "";
   }
 });
+
+// Your existing addMatch function
+function addMatch() {
+  const matchContainer = document.querySelector(".match-container");
+  const newMatch = matchContainer.firstElementChild.cloneNode(true);
+  const matchNameEl = newMatch.querySelector(".lws-matchName");
+  const matchResultEl = newMatch.querySelector(".lws-singleResult");
+  const incrementInput = newMatch.querySelector(".lws-increment");
+  const decrementInput = newMatch.querySelector(".lws-decrement");
+
+  matchNameEl.innerText = "Match " + matchCounter;
+  matchCounter++;
+
+  // Initialize the result for the new match to 0
+  matchResultEl.innerText = "0";
+
+  incrementInput.value = "";
+  decrementInput.value = "";
+
+  matchContainer.appendChild(newMatch);
+
+  // Add event listeners to the new increment and decrement inputs
+  incrementInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const enteredValue = parseInt(e.target.value);
+      const currentResult = parseInt(matchResultEl.innerText);
+      const newResult = currentResult + enteredValue;
+      store.dispatch(increment(enteredValue));
+      matchResultEl.innerText = newResult;
+      e.target.value = "";
+    }
+  });
+
+  decrementInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const enteredValue = parseInt(e.target.value);
+      const currentResult = parseInt(matchResultEl.innerText);
+      const newResult = currentResult - enteredValue;
+      store.dispatch(decrement(enteredValue));
+      matchResultEl.innerText = newResult; // Update the result for the new match
+      e.target.value = "";
+    }
+  });
+}
